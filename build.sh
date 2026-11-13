@@ -19,7 +19,7 @@ cd "$WORK"
 printf '>> Fetching official checksum manifest: %s/sha256sums\n' "$BASE"
 curl --fail --location --silent --show-error "$BASE/sha256sums" -o sha256sums
 # OpenWrt manifests use either "HASH  filename" or "HASH *filename".
-IB_FILE="$(awk '$2 ~ /^openwrt-imagebuilder-.*\.tar\.(zst|xz)$/ {gsub(/^\*/, "", $2); print $2; exit}' sha256sums)"
+IB_FILE="$(awk '{name=$2; sub(/^\*/, "", name); if (name ~ /^openwrt-imagebuilder-.*[.]tar[.](zst|xz)$/) {print name; exit}}' sha256sums)"
 [[ -n "$IB_FILE" ]] || fail "No Image Builder archive found in $BASE/sha256sums"
 EXPECTED="$(awk -v f="$IB_FILE" '$2==f || $2=="*" f {print $1; exit}' sha256sums)"
 [[ "$EXPECTED" =~ ^[0-9a-fA-F]{64}$ ]] || fail "Could not parse SHA256 for $IB_FILE"
