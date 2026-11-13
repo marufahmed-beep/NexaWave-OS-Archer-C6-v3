@@ -1,0 +1,14 @@
+#!/bin/sh
+# Safe first-boot defaults. Never configure or store Wi-Fi/PPPoE credentials here.
+# The user should connect by Ethernet, set a root password, then configure WAN/Wi-Fi in LuCI.
+
+uci -q set system.@system[0].hostname='NexaWave'
+uci -q set system.@system[0].zonename='Asia/Dhaka'
+uci -q set system.@system[0].timezone='<+06>-6'
+uci -q commit system
+
+# SSH remains on the LAN side only.
+uci -q set dropbear.@dropbear[0].Interface='lan'
+uci -q commit dropbear
+
+exit 0

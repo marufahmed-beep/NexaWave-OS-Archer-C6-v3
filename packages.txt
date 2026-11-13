@@ -1,0 +1,17 @@
+# Conservative default for the Archer C6 v3 flash budget.
+# Image Builder profile defaults supply the device drivers, firewall, dnsmasq and PPP support.
+luci
+
+# Optional packages: uncomment selectively, then verify final image size.
+# luci-app-sqm
+# sqm-scripts
+# kmod-sched-cake
+# luci-proto-wireguard
+# wireguard-tools
+# nlbwmon
+# luci-app-nlbwmon
+# https-dns-proxy
+# luci-app-https-dns-proxy
+# irqbalance
+# curl
+# ca-bundle
