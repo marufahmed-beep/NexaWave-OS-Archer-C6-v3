@@ -1,0 +1,42 @@
+
+name: Build NexaWave OS (Archer C6 v3)
+
+on:
+  workflow_dispatch:
+    inputs:
+      openwrt_version:
+        description: Official OpenWrt release version
+        required: true
+        default: "25.12.6"
+
+permissions:
+  contents: read
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install Image Builder dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev zlib1g-dev gawk git gettext \
+            libssl-dev xsltproc rsync wget unzip python3 zstd file curl
+
+      - name: Build firmware
+        env:
+          OPENWRT_VERSION: ${{ inputs.openwrt_version }}
+        run: ./build.sh
+
+      - name: Upload firmware and checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexawave-archer-c6-v3-${{ inputs.openwrt_version }}
+          path: out/*
+          if-no-files-found: error
+          retention-days: 14
